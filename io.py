@@ -35,7 +35,8 @@ def read_configuration(input_instance):
             "servers": servers,
             "unavailable_locations": unavailable_locations,
             "server_slots": server_slots,
-            "server_capacities": server_capacities}
+            "server_capacities": server_capacities,
+            "input_instance": input_instance}
 
 
 def write_solution(solution, output_file="solution"):

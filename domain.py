@@ -19,6 +19,12 @@ class Server:
     def allocated(self):
         return self.row is not None
 
+    def __str__(self):
+        return "Server Id " + str(self.id) + " Pool:" + str(self.pool) + " Row: " + str(self.row)
+
+    def __repr__(self):
+        return str(self)
+
     def get_allocation_info(self):
         if not self.allocated():
             return {"row": None,
