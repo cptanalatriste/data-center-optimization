@@ -24,16 +24,15 @@ def egalitarian_pool_assignment(servers, pools):
         allocated_servers), " allocated servers."
 
     current_pool = 0
-    pool_counter = 0
+    allocated_servers.sort(reverse=True, key=lambda server: server.capacity)
 
     for allocate_server in allocated_servers:
 
         allocate_server.pool = current_pool
-        pool_counter += 1
+        current_pool += 1
 
-        if pool_counter >= servers_per_pool:
-            current_pool += 1
-            pool_counter = 0
+        if current_pool == servers_per_pool:
+            current_pool = 0
 
     return utils.get_allocation_results(servers, pools)
 
@@ -42,16 +41,16 @@ def manage_datacenter(problem_configuration):
     data_center, servers = domain.get_domain_objects(problem_configuration)
 
     allocate_servers(data_center, servers)
-    # score, solution = egalitarian_pool_assignment(servers, data_center.pools)
-    # print "Egalitarian score ", score
+    score, solution = egalitarian_pool_assignment(servers, data_center.pools)
+    print "Egalitarian score ", score
 
-    # current_solution = [item["pool"] for item in solution]
-    # score, solution = optimizer.hill_climbing_optimizer(servers=servers, pools=data_center.pools,
-    #                                                     current_solution=current_solution,
-    #                                                     input_instance=problem_configuration["input_instance"])
+    current_solution = [item["pool"] for item in solution]
+    score, solution = optimizer.hill_climbing_optimizer(servers=servers, pools=data_center.pools,
+                                                        current_solution=current_solution,
+                                                        input_instance=problem_configuration["input_instance"])
 
-    score, solution = optimizer.genetic_optimizer(servers=servers, supported_pools=data_center.pools,
-                                                  input_instance=problem_configuration["input_instance"])
+    # score, solution = optimizer.genetic_optimizer(servers=servers, supported_pools=data_center.pools,
+    #                                               input_instance=problem_configuration["input_instance"])
     print "Optimized score ", score
 
     return solution
