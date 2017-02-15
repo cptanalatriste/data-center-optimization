@@ -1,6 +1,8 @@
 """
 This module coordinates the execution
 """
+import random
+
 import domain
 import io
 import optimizer
@@ -40,16 +42,24 @@ def manage_datacenter(problem_configuration):
     data_center, servers = domain.get_domain_objects(problem_configuration)
 
     allocate_servers(data_center, servers)
-    score, solution = egalitarian_pool_assignment(servers, data_center.pools)
+    # score, solution = egalitarian_pool_assignment(servers, data_center.pools)
+    # print "Egalitarian score ", score
 
+    # current_solution = [item["pool"] for item in solution]
     # score, solution = optimizer.hill_climbing_optimizer(servers=servers, pools=data_center.pools,
+    #                                                     current_solution=current_solution,
     #                                                     input_instance=problem_configuration["input_instance"])
-    print "final score ", score
+
+    score, solution = optimizer.genetic_optimizer(servers=servers, supported_pools=data_center.pools,
+                                                  input_instance=problem_configuration["input_instance"])
+    print "Optimized score ", score
 
     return solution
 
 
 def main():
+    # random.seed(9001)
+
     input_instance = "sample_input"
     input_instance = "dc"
 
